@@ -25,6 +25,7 @@ class Game:
         self.language = language
         self.numPlayers = numPlayers
         self.players = []
+        self.responses = []
         self.gameState = 'waiting'
         self.round = 0
 
