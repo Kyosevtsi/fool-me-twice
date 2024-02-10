@@ -6,6 +6,7 @@ from random import randint, choice
 import threading
 import json
 
+TIME_PER_QUESTION = 30
 PLAYERS_PER_GAME = 4
 activeGames = set()
 
@@ -49,9 +50,13 @@ class Game:
         translations = json.load(f)
 
         while True:
+            startTime = time.time()
             questionObj = choice(translations['translations'])
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
+
+            while (time.time() - startTime) < TIME_PER_QUESTION*1000:
+                time.sleep(1)
 
         f.close()
         pass
@@ -59,17 +64,8 @@ class Game:
     def add_player(self, player):
         if len(self.players) < PLAYERS_PER_GAME:
             self.players.append(player)
-
             socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id})
             print(f"Player {player} joined the game.")
-
-    # def start_game(self):
-    #     if len(self.players) == PLAYERS_PER_GAME:
-    #         print("Starting the game...")
-    #         # Implement logic to start the game here
-    #         pass
-    #     else:
-    #         print("Not enough players to start the game.")
 
 # Initialize the Flask app
 app = Flask(__name__)
