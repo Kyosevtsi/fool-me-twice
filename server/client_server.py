@@ -38,12 +38,13 @@ class Game:
         # recieve the answers from the clients
         # send timeout requests (when time expries)
 
+        print("Game with ID " + str(self.id) + " has started.")
+        # send the start events to the client
         socketio.emit('gameStarting', {'gameID': self.id})
-        # time buffer
-        time.sleep(5)
-
+        time.sleep(3)
         socketio.emit('gameStarted', {'gameID': self.id})
 
+        # load the translations
         f = open('../translations.json', 'r')
         translations = json.load(f)
 
@@ -51,7 +52,8 @@ class Game:
             questionObj = choice(translations['translations'])
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
-        
+
+        f.close()
         pass
 
     def add_player(self, player):
@@ -120,6 +122,10 @@ def join(rawData):
     game = next((game for game in activeGames if game.id == gameID), None)
     if game is None:
         socketio.emit('gameNotFound')
+        return
+
+    if (game.gameState != 'waiting'):
+        socketio.emit('gameInProgress')
         return
 
     player = Player(username, sid)
