@@ -6,7 +6,7 @@ from random import randint, choice
 import threading
 import json
 
-TIME_PER_QUESTION = 30
+TIME_PER_QUESTION = 32
 PLAYERS_PER_GAME = 4
 activeGames = set()
 
@@ -59,7 +59,8 @@ class Game:
                 rand_index = randint(0,(len(translations['translations'])-1))
             questionObj = translations['translations'][rand_index]
             used_indeces.add(rand_index)
-            # questionObj = choice(translations['translations'])
+
+
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
 
