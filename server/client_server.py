@@ -3,9 +3,12 @@ import socketio
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO
 from random import randint
+import threading
+import json
 
 PLAYERS_PER_GAME = 4
-activeGames = set(0)
+activeGames = set()
+activeGames.add(0)
 
 class Player:
     def __init__(self, name, sid):
@@ -47,7 +50,7 @@ class Game:
 
         while True:
             questionObj = random.choice(translations['translations'])
-            question = questionObj.Other[self.language]
+            question = questionObj['Other'][self.language]
             print(question)
             socketio.emit('question', {'gameID': self.id, payload: question}, broadcast=True)
         
@@ -88,7 +91,7 @@ def createLobby():
     while gameID in activeGames:
         gameID = randint(1000, 9999)
     game = Game(gameID, language, numPlayers)
-    activeGames.append(game)
+    activeGames.add(game)
 
     threading.Thread(target=game.event_loop).start()
 
@@ -108,8 +111,8 @@ def disconnect():
         game.players = [player for player in game.players if player.sid != sid]
 
 @socketio.on('join')
-def join(data):
-    print(data)
+def join(rawData):
+    data = json.loads(rawData)
     gameID = data['gameID']
     username = data['username']
     sid = request.sid  # Get the session ID of the client
