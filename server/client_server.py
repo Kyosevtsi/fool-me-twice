@@ -2,13 +2,12 @@ import time
 import socketio
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO
-from random import randint
+from random import randint, choice
 import threading
 import json
 
 PLAYERS_PER_GAME = 4
 activeGames = set()
-activeGames.add(0)
 
 class Player:
     def __init__(self, name, sid):
@@ -39,28 +38,29 @@ class Game:
         # recieve the answers from the clients
         # send timeout requests (when time expries)
 
-        socketio.emit('gameStarting', {'gameID': self.id}, broadcast=True)
-        # time buffer
-        time.sleep(5)
+        print("Game with ID " + str(self.id) + " has started.")
+        # send the start events to the client
+        socketio.emit('gameStarting', {'gameID': self.id})
+        time.sleep(3)
+        socketio.emit('gameStarted', {'gameID': self.id})
 
-        socketio.emit('gameStarted', {'gameID': self.id}, broadcast=True)
-
-        f = open('./translations.json', 'r')
+        # load the translations
+        f = open('../translations.json', 'r')
         translations = json.load(f)
 
         while True:
-            questionObj = random.choice(translations['translations'])
-            question = questionObj['Other'][self.language]
-            print(question)
-            socketio.emit('question', {'gameID': self.id, payload: question}, broadcast=True)
-        
+            questionObj = choice(translations['translations'])
+            question = questionObj['Other'][int(self.language)]
+            socketio.emit('question', {'gameID': self.id, 'payload': question})
+
+        f.close()
         pass
 
     def add_player(self, player):
         if len(self.players) < PLAYERS_PER_GAME:
             self.players.append(player)
 
-            socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id}, broadcast=True)
+            socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id})
             print(f"Player {player} joined the game.")
 
     # def start_game(self):
@@ -87,9 +87,10 @@ def createLobby():
     numPlayers = int(data['numPlayers'])
 
     # Create a new game
-    gameID = 0
-    while gameID in activeGames:
-        gameID = randint(1000, 9999)
+    gameID = randint(1000, 9999)
+    if len(activeGames) > 0: 
+        while gameID in activeGames:
+            gameID = randint(1000, 9999)
     game = Game(gameID, language, numPlayers)
     activeGames.add(game)
 
@@ -121,6 +122,10 @@ def join(rawData):
     game = next((game for game in activeGames if game.id == gameID), None)
     if game is None:
         socketio.emit('gameNotFound')
+        return
+
+    if (game.gameState != 'waiting'):
+        socketio.emit('gameInProgress')
         return
 
     player = Player(username, sid)
