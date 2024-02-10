@@ -11,12 +11,6 @@ activeGames = []
 # Initialize the app
 app = Flask(__name__)
 socketio = SocketIO(app)
-app.config['MONGODB_SETTINGS'] = { 'db': 'placeholder' }
-
-# ... Other API routes ...
-@app.route('/api/placeholder', methods=['GET'])
-def get_placeholder():
-    return jsonify({ 'message': 'Placeholder' })
 
 @app.route('/createLobby', methods=['POST'])
 def createLobby():
