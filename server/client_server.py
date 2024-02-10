@@ -75,7 +75,7 @@ class Game:
     def add_player(self, player):
         if len(self.players) < PLAYERS_PER_GAME:
             self.players.append(player)
-            socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id})
+            socketio.emit('playerJoined', {'player': str(player),'playerID': player.pID ,'gameID': self.id})
             print(f"Player {player} joined the game.")
 
 # Initialize the Flask app
@@ -135,7 +135,7 @@ def join(rawData):
         socketio.emit('gameInProgress')
         return
 
-    player = Player(username, sid)
+    player = Player(username, sid, len(game.players) + 1)
     game.add_player(player)
 
     if len(game.players) == PLAYERS_PER_GAME:
@@ -143,6 +143,28 @@ def join(rawData):
         game.gameState = 'playing'
     else:
         socketio.emit('updatePlayers', [str(player) for player in game.players])  # Update player list
+
+@socketio.on('response')
+def response(rawData):
+    data = json.loads(rawData)
+    gameID = data['gameID']
+    response = data['response']
+    sid = request.sid
+
+    game = next((game for game in activeGames if game.id == gameID), None)
+    if game is None:
+        socketio.emit('gameNotFound')
+        return
+
+    player = next((player for player in game.players if player.sid == sid), None)
+    if player is None:
+        socketio.emit('playerNotFound')
+        return
+
+    game.responses.append({
+        'player': player,
+        'response': response
+    })
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)
