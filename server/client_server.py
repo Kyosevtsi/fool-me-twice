@@ -8,7 +8,6 @@ import json
 
 PLAYERS_PER_GAME = 4
 activeGames = set()
-activeGames.add(0)
 
 class Player:
     def __init__(self, name, sid):
@@ -87,9 +86,10 @@ def createLobby():
     numPlayers = int(data['numPlayers'])
 
     # Create a new game
-    gameID = 0
-    while gameID in activeGames:
-        gameID = randint(1000, 9999)
+    gameID = randint(1000, 9999)
+    if len(activeGames) > 0: 
+        while gameID in activeGames:
+            gameID = randint(1000, 9999)
     game = Game(gameID, language, numPlayers)
     activeGames.add(game)
 
