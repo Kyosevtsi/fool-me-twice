@@ -2,7 +2,7 @@ import time
 import socketio
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO
-from random import randint
+from random import randint, choice
 import threading
 import json
 
@@ -44,14 +44,13 @@ class Game:
 
         socketio.emit('gameStarted', {'gameID': self.id})
 
-        f = open('./translations.json', 'r')
+        f = open('../translations.json', 'r')
         translations = json.load(f)
 
         while True:
-            questionObj = random.choice(translations['translations'])
-            question = questionObj['Other'][self.language]
-            print(question)
-            socketio.emit('question', {'gameID': self.id, payload: question})
+            questionObj = choice(translations['translations'])
+            question = questionObj['Other'][int(self.language)]
+            socketio.emit('question', {'gameID': self.id, 'payload': question})
         
         pass
 
