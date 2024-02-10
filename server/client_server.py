@@ -2,10 +2,11 @@ import time
 import socketio
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO
-from random import randint
+from random import randint, choice
 import threading
 import json
 
+TIME_PER_QUESTION = 32
 PLAYERS_PER_GAME = 4
 activeGames = set()
 
@@ -32,43 +33,43 @@ class Game:
         
         while self.gameState == 'waiting':
             time.sleep(1)
+        print("Game with ID " + str(self.id) + " has started.")
+        # send the start events to the client
+        socketio.emit('gameStarting', {'gameID': self.id})
+        time.sleep(3)
+        socketio.emit('gameStarted', {'gameID': self.id})
 
-        # Implement game logic here
-        # send the questions to the clients
-        # recieve the answers from the clients
-        # send timeout requests (when time expries)
-
-        socketio.emit('gameStarting', {'gameID': self.id}, broadcast=True)
-        # time buffer
-        time.sleep(5)
-
-        socketio.emit('gameStarted', {'gameID': self.id}, broadcast=True)
-
-        f = open('./translations.json', 'r')
+        # load the translations
+        f = open('../translations.json', 'r')
         translations = json.load(f)
 
+        used_indeces = set()
         while True:
-            questionObj = random.choice(translations['translations'])
-            question = questionObj['Other'][self.language]
-            print(question)
-            socketio.emit('question', {'gameID': self.id, payload: question}, broadcast=True)
-        
+            startTime = time.time()
+            # translations['translations']
+            rand_index = randint(0,(len(translations['translations'])-1))
+            print(rand_index)
+            while rand_index in used_indeces:
+                rand_index = randint(0,(len(translations['translations'])-1))
+            questionObj = translations['translations'][rand_index]
+            used_indeces.add(rand_index)
+
+ 
+            question = questionObj['Other'][int(self.language)]
+            socketio.emit('question', {'gameID': self.id, 'payload': question})
+
+            # check if all people have responded in the while loop
+            while (time.time() - startTime) < TIME_PER_QUESTION*1000 :
+                time.sleep(1)
+
+        f.close()
         pass
 
     def add_player(self, player):
         if len(self.players) < PLAYERS_PER_GAME:
             self.players.append(player)
-
-            socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id}, broadcast=True)
+            socketio.emit('playerJoined', {'player': str(player),'playerID': player.pID ,'gameID': self.id})
             print(f"Player {player} joined the game.")
-
-    # def start_game(self):
-    #     if len(self.players) == PLAYERS_PER_GAME:
-    #         print("Starting the game...")
-    #         # Implement logic to start the game here
-    #         pass
-    #     else:
-    #         print("Not enough players to start the game.")
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -123,7 +124,11 @@ def join(rawData):
         socketio.emit('gameNotFound')
         return
 
-    player = Player(username, sid)
+    if (game.gameState != 'waiting'):
+        socketio.emit('gameInProgress')
+        return
+
+    player = Player(username, sid, len(game.players) + 1)
     game.add_player(player)
 
     if len(game.players) == PLAYERS_PER_GAME:
@@ -131,6 +136,28 @@ def join(rawData):
         game.gameState = 'playing'
     else:
         socketio.emit('updatePlayers', [str(player) for player in game.players])  # Update player list
+
+@socketio.on('response')
+def response(rawData):
+    data = json.loads(rawData)
+    gameID = data['gameID']
+    response = data['response']
+    sid = request.sid
+
+    game = next((game for game in activeGames if game.id == gameID), None)
+    if game is None:
+        socketio.emit('gameNotFound')
+        return
+
+    player = next((player for player in game.players if player.sid == sid), None)
+    if player is None:
+        socketio.emit('playerNotFound')
+        return
+
+    game.responses.append({
+        'player': player,
+        'response': response
+    })
 
 if __name__ == '__main__':
     socketio.run(app, debug=True)

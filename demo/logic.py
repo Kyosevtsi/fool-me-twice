@@ -11,8 +11,8 @@ def shuffle():
 
 if __name__ == "__main__":
     sentence = "Привет, как дела"
-    correct = "Hi how are you"
-    pool = [("Hi how are you", 0)]
+    correct = "Hi, how are you"
+    pool = [("Hi, how are you", 0)]
 
     num_players = int(input("Enter number of players: "))
     scores = [0 for i in range(num_players+1)]

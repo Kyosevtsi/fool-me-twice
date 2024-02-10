@@ -5,6 +5,8 @@ import io from 'socket.io-client';
 import CreatePage from './Pages/CreatePage';
 import JoinPage from './Pages/JoinGame';
 import NamePage from './Pages/NamePage';
+import './FoolMeTwice.css';
+
 
 export default function FoolMeTwice() {
     const [pageShown, setPageShown] = useState("home");
@@ -27,9 +29,9 @@ export default function FoolMeTwice() {
     }
 
     return (
-        <Fragment>
+        <div className="container">
             {pageShown === 'home' &&
-                <div>
+                <div className="button-container">
                     <button onClick={() => changePageHandler("createGame")}>Create Game</button>   
                     <button onClick={() => changePageHandler("joinGame")}>Join Game</button>
                 </div>
@@ -37,6 +39,6 @@ export default function FoolMeTwice() {
             {pageShown === "createGame" && <CreatePage language={language} setLanguage={setLanguage} maxPlayers={maxPlayers} setMaxPlayers={setMaxPlayers} onContinue={() => setPageShown("name")} />}
             {pageShown === "joinGame" && <JoinPage code={code} setCode={setCode} onContinue={() => setPageShown("name")} />}
             {pageShown === "name" && <NamePage name={name} setName={setName} connect={handleConnect}/>}
-        </Fragment>
+        </div>
     )
 }
