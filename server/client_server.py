@@ -25,20 +25,48 @@ class Game:
         self.gameState = 'waiting'
         self.round = 0
 
+    def event_loop(self):
+        print("The game has started. Game ID: " + str(self.id))
+        
+        while self.gameState == 'waiting':
+            time.sleep(1)
+
+        # Implement game logic here
+        # send the questions to the clients
+        # recieve the answers from the clients
+        # send timeout requests (when time expries)
+
+        socketio.emit('gameStarting', {'gameID': self.id}, broadcast=True)
+        # time buffer
+        time.sleep(5)
+
+        socketio.emit('gameStarted', {'gameID': self.id}, broadcast=True)
+
+        f = open('./translations.json', 'r')
+        translations = json.load(f)
+
+        while True:
+            questionObj = random.choice(translations['translations'])
+            question = questionObj.Other[self.language]
+            print(question)
+            socketio.emit('question', {'gameID': self.id, payload: question}, broadcast=True)
+        
+        pass
+
     def add_player(self, player):
         if len(self.players) < PLAYERS_PER_GAME:
             self.players.append(player)
-            print(f"Player {player} joined the game.")
-        else:
-            print("Maximum players reached for this game.")
 
-    def start_game(self):
-        if len(self.players) == PLAYERS_PER_GAME:
-            print("Starting the game...")
-            # Implement logic to start the game here
-            pass
-        else:
-            print("Not enough players to start the game.")
+            socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id}, broadcast=True)
+            print(f"Player {player} joined the game.")
+
+    # def start_game(self):
+    #     if len(self.players) == PLAYERS_PER_GAME:
+    #         print("Starting the game...")
+    #         # Implement logic to start the game here
+    #         pass
+    #     else:
+    #         print("Not enough players to start the game.")
 
 # Initialize the Flask app
 app = Flask(__name__)
@@ -61,6 +89,8 @@ def createLobby():
         gameID = randint(1000, 9999)
     game = Game(gameID, language, numPlayers)
     activeGames.append(game)
+
+    threading.Thread(target=game.event_loop).start()
 
     return jsonify({'gameID': gameID})
 
@@ -95,6 +125,7 @@ def join(data):
 
     if len(game.players) == PLAYERS_PER_GAME:
         socketio.emit('startGame')  # Notify everyone
+        game.gameState = 'playing'
     else:
         socketio.emit('updatePlayers', [str(player) for player in game.players])  # Update player list
 
