@@ -1,0 +1,109 @@
+{
+    "translations": [
+        {
+            "Correct": "Every day I go to school, but I always look forward to the weekends.",
+            "Other": [
+                "Todos los días voy a la escuela, pero siempre espero con ansias los fines de semana.",
+                "Каждый день я хожу в школу, но всегда с нетерпением жду выходных."
+            ]
+        },
+        {
+            "Correct": "If you don't mind, could you please repeat that?",
+            "Other": [
+                "Si no le importa, ¿podría repetir eso por favor?",
+                "Не могли бы вы повторить это, пожалуйста?"
+            ]
+        },
+        {
+            "Correct": "The book that I borrowed from the library is overdue.",
+            "Other": [
+                "El libro que tomé prestado de la biblioteca está atrasado.",
+                "Книга, которую я взял в библиотеке, просрочена."
+            ]
+        },
+        {
+            "Correct": "Although I studied very hard, the exam was much more difficult than I expected.",
+            "Other": [
+                "Aunque estudié mucho, el examen fue mucho más difícil de lo que esperaba.",
+                "Хотя я очень старался, экзамен оказался намного сложнее, чем я ожидал."
+            ]
+        },
+        {
+            "Correct": "Do you remember where we parked the car?",
+            "Other": [
+                "¿Recuerdas dónde estacionamos el auto?",
+                "Ты помнишь, где мы припарковали машину?"
+            ]
+        },
+        {
+            "Correct": "The restaurant that you recommended was excellent.",
+            "Other": [
+                "El restaurante que recomendaste fue excelente.",
+                "Ресторан, который вы порекомендовали, был превосходным."
+            ]
+        },
+        {
+            "Correct": "I'd like to travel the world after I graduate from university.",
+            "Other": [
+                "Me gustaría viajar por el mundo después de graduarme de la universidad.",
+                "Я бы хотел путешествовать по миру после окончания университета."
+            ]
+        },
+        {
+            "Correct": "While I enjoy reading, I prefer spending time outdoors.",
+            "Other": [
+                "Aunque disfruto de la lectura, prefiero pasar tiempo al aire libre.",
+                "Хотя мне нравится читать, я предпочитаю проводить время на свежем воздухе."
+            ]
+        },
+        {
+            "Correct": "Is there anything I can do to help?",
+            "Other": [
+                "¿Hay algo que pueda hacer para ayudar?",
+                "Есть ли что-нибудь, чем я могу помочь?"
+            ]
+        },
+        {
+            "Correct": "She speaks English fluently, even though it's not her native language.",
+            "Other": [
+                "Ella habla inglés con fluidez, aunque no es su lengua materna.",
+                "Она свободно говорит по-английски, хотя это не ее родной язык."
+            ]
+        },
+        {
+            "Correct": "The view from the top of the mountain was breathtaking.",
+            "Other": [
+                "La vista desde la cima de la montaña era impresionante.",
+                "Вид с вершины горы был захватывающим."
+            ]
+        },
+        {
+            "Correct": "Before we leave, we need to make sure we have everything we need.",
+            "Other": [
+                "Antes de irnos, debemos asegurarnos de tener todo lo que necesitamos.",
+                "Перед тем как уйти, нам нужно убедиться, что у нас есть все необходимое."
+            ]
+        },
+        {
+            "Correct": "I spilled coffee on my shirt, so I need to change.",
+            "Other": [
+                "Derramé café en mi camisa, así que necesito cambiarme.",
+                "Я пролил кофе на рубашку, поэтому мне нужно переодеться."
+            ]
+        },
+        {
+            "Correct": "The movie was so funny that I couldn't stop laughing.",
+            "Other": [
+                "La película fue tan graciosa que no podía parar de reír.",
+                "Фильм был настолько смешным, что я не мог перестать смеяться."
+            ]
+        },
+        {
+            "Correct": "Whenever I visit my grandparents, they always spoil me.",
+            "Other": [
+                "Cada vez que visito a mis abuelos, siempre me consienten.",
+                "Всякий раз, когда я навещаю своих бабушку и дедушку, они всегда меня балуют."
+            ]
+        }
+    ]
+}
