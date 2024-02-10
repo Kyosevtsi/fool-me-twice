@@ -4,7 +4,7 @@ import espFlag from "../../images/esp_svg.svg";
 import rusFlag from "../../images/rus_svg.svg";
 
 const CreatePage = props => {
-    const [language, setLanguage] = useState("esp");
+    const [language, setLanguage] = useState("ESP");  // currently: 0=ESP, 1=RUS
     const [maxPlayers, setMaxPlayers] = useState(4);
 
     return (

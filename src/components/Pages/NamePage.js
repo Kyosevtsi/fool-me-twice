@@ -1,13 +1,11 @@
 import { useState } from "react";
 
 const NamePage = props => {
-    const [name, setName] = useState("");
-
     return (
         <div>
             <h2>Enter name</h2>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
-            <button onClick={props.onContinue}>Continue</button>
+            <input type="text" value={props.name} onChange={(e) => props.setName(e.target.value)} />
+            <button onClick={() => props.handleConnect}>Continue</button>
         </div>
     )
 }
