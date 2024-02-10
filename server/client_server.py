@@ -63,7 +63,8 @@ class Game:
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
 
-            while (time.time() - startTime) < TIME_PER_QUESTION*1000:
+            # check if all people have responded in the while loop
+            while (time.time() - startTime) < TIME_PER_QUESTION*1000 :
                 time.sleep(1)
 
         f.close()
