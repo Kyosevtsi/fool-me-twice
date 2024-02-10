@@ -12,15 +12,16 @@ export default function FoolMeTwice() {
     return (
         <Fragment>
             <div className="container">
-    <div className="button-container">
-        <button onClick={() => setPageShown("createGame")}>Create Game</button>   
-        <button onClick={() => setPageShown("joinGame")}>Join Game</button>   
-    </div>
-    {pageShown === "createGame" && <CreatePage onContinue={() => setPageShown("name")} />}
-    {pageShown === "joinGame" && <JoinPage onContinue={() => setPageShown("name")} />}
-    {pageShown === "name" && <NamePage />}
-</div>
-
+                {pageShown === 'home' &&
+                    <div className="button-container">
+                        <button onClick={() => setPageShown("createGame")}>Create Game</button>   
+                        <button onClick={() => setPageShown("joinGame")}>Join Game</button>
+                    </div>
+                }
+                {pageShown === "createGame" && <CreatePage onContinue={() => setPageShown("name")} />}
+                {pageShown === "joinGame" && <JoinPage onContinue={() => setPageShown("name")} />}
+                {pageShown === "name" && <NamePage />}
+            </div>
         </Fragment>
     )
 }
