@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import pymongo
 import threading
 import Game
+from random import randint
 
 # Initialize the app
 app = Flask(__name__)
@@ -25,7 +26,7 @@ def createLobby():
     game = Game.Game(gameID, language, numPlayers)
 
     # create the game event loop
-    threading.Thread(target=game.gameLoop, args=(language, numPlayers)).start()
+    threading.Thread(target=game.gameLoop).start()
 
     return jsonify({ 'gameID': gameID })
 
