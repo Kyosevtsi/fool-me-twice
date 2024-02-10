@@ -5,7 +5,7 @@ from flask_socketio import SocketIO
 from random import randint
 
 PLAYERS_PER_GAME = 4
-activeGames = []
+activeGames = set(0)
 
 class Player:
     def __init__(self, name, sid):
@@ -56,7 +56,9 @@ def createLobby():
     numPlayers = int(data['numPlayers'])
 
     # Create a new game
-    gameID = randint(1000, 9999)
+    gameID = 0
+    while gameID in activeGames:
+        gameID = randint(1000, 9999)
     game = Game(gameID, language, numPlayers)
     activeGames.append(game)
 
