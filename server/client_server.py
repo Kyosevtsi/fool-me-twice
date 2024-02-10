@@ -48,8 +48,16 @@ class Game:
         f = open('../translations.json', 'r')
         translations = json.load(f)
 
+        used_indeces = set()
         while True:
-            questionObj = choice(translations['translations'])
+            # translations['translations']
+            rand_index = randint(0,(len(translations['translations'])-1))
+            print(rand_index)
+            while rand_index in used_indeces:
+                rand_index = randint(0,(len(translations['translations'])-1))
+            questionObj = translations['translations'][rand_index]
+            used_indeces.add(rand_index)
+            # questionObj = choice(translations['translations'])
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
 
