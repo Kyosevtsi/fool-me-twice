@@ -38,11 +38,11 @@ class Game:
         # recieve the answers from the clients
         # send timeout requests (when time expries)
 
-        socketio.emit('gameStarting', {'gameID': self.id}, broadcast=True)
+        socketio.emit('gameStarting', {'gameID': self.id})
         # time buffer
         time.sleep(5)
 
-        socketio.emit('gameStarted', {'gameID': self.id}, broadcast=True)
+        socketio.emit('gameStarted', {'gameID': self.id})
 
         f = open('./translations.json', 'r')
         translations = json.load(f)
@@ -51,7 +51,7 @@ class Game:
             questionObj = random.choice(translations['translations'])
             question = questionObj['Other'][self.language]
             print(question)
-            socketio.emit('question', {'gameID': self.id, payload: question}, broadcast=True)
+            socketio.emit('question', {'gameID': self.id, payload: question})
         
         pass
 
@@ -59,7 +59,7 @@ class Game:
         if len(self.players) < PLAYERS_PER_GAME:
             self.players.append(player)
 
-            socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id}, broadcast=True)
+            socketio.emit('playerJoined', {'player': str(player), 'gameID': self.id})
             print(f"Player {player} joined the game.")
 
     # def start_game(self):
