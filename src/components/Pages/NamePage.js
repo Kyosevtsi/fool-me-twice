@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 const NamePage = props => {
     const [name, setName] = useState("");
 
