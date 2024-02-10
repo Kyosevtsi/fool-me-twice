@@ -1,12 +1,11 @@
-import { Fragment, useState, useEffect } from 'react';
+import { useState } from 'react';
 import axios from 'axios';
-import io from 'socket.io-client';
+//import io from 'socket.io-client';
 
 import CreatePage from './Pages/CreatePage';
 import JoinPage from './Pages/JoinGame';
 import NamePage from './Pages/NamePage';
 import './FoolMeTwice.css';
-
 
 export default function FoolMeTwice() {
     const [pageShown, setPageShown] = useState("home");
@@ -16,6 +15,11 @@ export default function FoolMeTwice() {
     const [code, setCode] = useState(0);
     const [name, setName] = useState("");
 
+    const languageMap = {
+        'ESP': 0,
+        'RUS': 1
+    };
+
     const changePageHandler = selectedOption => {
         setPageShown(selectedOption);
         setLobbyOption(selectedOption);
@@ -23,7 +27,11 @@ export default function FoolMeTwice() {
 
     const handleConnect = async () => {
         if (lobbyOption === "createGame") {
-            gid = await axios.post("http://localhost:5000/createLobby")  // returns game ID
+            gameData = {
+                'language': languageMap[language],
+                'numPlayers': maxPlayers
+            };
+            gid = await axios.post("http://localhost:5000/createLobby", gameData);  // returns game ID
             console.log(gid);
         }
     }
