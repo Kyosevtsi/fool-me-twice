@@ -43,7 +43,6 @@ class Game:
 # Initialize the Flask app
 app = Flask(__name__)
 socketio = SocketIO(app)
-app.config['MONGODB_SETTINGS'] = {'db': 'placeholder'}
 
 # API routes
 @app.route('/api/placeholder', methods=['GET'])
