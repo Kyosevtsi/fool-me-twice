@@ -4,6 +4,7 @@ import threading
 import Game
 from random import randint
 from flask_socketio import SocketIO
+import json
 
 activeGames = []
 
@@ -41,10 +42,11 @@ def disconnect():
     print('Client disconnected')
 
 @socketio.on('join')
-def join(data):
-    print(data)
+def join(rawData):
+    data = json.loads(rawData)
     gameID = data['gameID']
     username = data['username'] 
+    sid = request.sid
 
     # find the game
     game = next((game for game in activeGames if game.id == gameID), None)
