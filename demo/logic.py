@@ -10,7 +10,7 @@ def shuffle():
 
 
 if __name__ == "__main__":
-    sentence = "Sosi hui"
+    sentence = "Привет, как дела"
     correct = "Hi how are you"
     pool = [("Hi how are you", 0)]
 
