@@ -25,7 +25,6 @@ class Game:
         self.language = language
         self.numPlayers = numPlayers
         self.players = []
-        self.responses = []
         self.gameState = 'waiting'
         self.round = 0
 
@@ -34,12 +33,6 @@ class Game:
         
         while self.gameState == 'waiting':
             time.sleep(1)
-
-        # Implement game logic here
-        # send the questions to the clients
-        # recieve the answers from the clients
-        # send timeout requests (when time expries)
-
         print("Game with ID " + str(self.id) + " has started.")
         # send the start events to the client
         socketio.emit('gameStarting', {'gameID': self.id})
@@ -61,7 +54,7 @@ class Game:
             questionObj = translations['translations'][rand_index]
             used_indeces.add(rand_index)
 
-
+ 
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
 
