@@ -7,7 +7,6 @@ from random import randint, choice
 import threading
 import json
 
-
 TIME_PER_QUESTION = 32
 PLAYERS_PER_GAME = 4
 NUMBER_OF_ROUNDS = 5
@@ -30,41 +29,6 @@ class Game:
         self.players = []
         self.gameState = 'waiting'
         self.round = 0
-
-    # def event_loop(self):
-    #     print("The game has started. Game ID: " + str(self.id))
-        
-    #     while self.gameState == 'waiting':
-    #         time.sleep(1)
-    #     print("Game with ID " + str(self.id) + " has started.")
-    #     # send the start events to the client
-    #     socketio.emit('gameStarting', {'gameID': self.id})
-    #     time.sleep(3)
-    #     socketio.emit('gameStarted', {'gameID': self.id})
-
-    #     # load the translations
-    #     f = open('../translations.json', 'r')
-    #     translations = json.load(f)
-    #     round = 0
-
-    #     used_indeces = set()
-    #     while round < NUMBER_OF_ROUNDS:
-    #         startTime = time.time()
-    #         round += 1
-    #         print(f"Round {round}!")
-    #         # translations['translations'] is the list of translations
-    #         rand_index = randint(0,(len(translations['translations'])-1))
-    #         while rand_index in used_indeces:
-    #             rand_index = randint(0,(len(translations['translations'])-1))
-    #         questionObj = translations['translations'][rand_index]
-    #         used_indeces.add(rand_index)
-
-    #         question = questionObj['Other'][int(self.language)]
-    #         socketio.emit('question', {'gameID': self.id, 'payload': question})
-
-    #         # check if all people have responded in the while loop
-    #         while (time.time() - startTime) < TIME_PER_QUESTION*1000:
-    #             time.sleep(1)
         
     def event_loop(self):
         print("The game has started. Game ID: " + str(self.id))
@@ -148,6 +112,7 @@ def createLobby():
     data = request.args
     language = data['language']
     numPlayers = int(data['numPlayers'])
+    hostName = data["name"]
 
     # Create a new game
     gameID = randint(1000, 9999)
@@ -156,6 +121,9 @@ def createLobby():
             gameID = randint(1000, 9999)
     game = Game(gameID, language, numPlayers)
     activeGames.add(game)
+
+    # Create a new player
+    
 
     threading.Thread(target=game.event_loop).start()
 
