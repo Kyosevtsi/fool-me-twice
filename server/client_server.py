@@ -99,7 +99,7 @@ class Game:
 # Initialize the Flask app
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origin="*")
 
 # API routes
 @app.route('/api/placeholder', methods=['GET'])

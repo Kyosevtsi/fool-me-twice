@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
-const socket = io("http://localhost:5000");
+//const socket = io("http://localhost:5000");
 
 const LobbyPage = props => {
     const [players, setPlayers] = useState(null);
 
-    useEffect(() => {
+    /*useEffect(() => {
         socket.on("playerJoined")
-    })
+    })*/
 
     return (
         <div>
