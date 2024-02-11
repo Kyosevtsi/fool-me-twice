@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 //import io from 'socket.io-client';
+import logo from '../images/foolmetwice.jpg'; // Import the image file
 
 import CreatePage from './Pages/CreatePage';
 import JoinPage from './Pages/JoinGame';
@@ -38,16 +39,18 @@ export default function FoolMeTwice() {
 
     return (
         <div className="container">
-            {pageShown === 'home' &&
-                <div className="button-container">
-                    <button onClick={() => changePageHandler("createGame")}>Create Game</button>   
-                    <button onClick={() => changePageHandler("joinGame")}>Join Game</button>
-                </div>
-            }
-            {pageShown === "createGame" && <CreatePage language={language} setLanguage={setLanguage} maxPlayers={maxPlayers} setMaxPlayers={setMaxPlayers} onContinue={() => setPageShown("name")} />}
-            {pageShown === "joinGame" && <JoinPage code={code} onContinue={() => setPageShown("name")} />}
-            {pageShown === "name" && <NamePage name={name} setName={setName} connect={handleConnect}/>}
-            {pageShown === "lobby" && <LobbyPage lobbyOption={lobbyOption} maxPlayers={maxPlayers} code={code}/>}
+    <img src={logo} alt="Logo" /> {/* Include the image */}
+    {pageShown === 'home' &&
+        <div className="button-container">
+            <button onClick={() => changePageHandler("createGame")}>Create Game</button>   
+            <button onClick={() => changePageHandler("joinGame")}>Join Game</button>
         </div>
+    }
+    {pageShown === "createGame" && <CreatePage language={language} setLanguage={setLanguage} maxPlayers={maxPlayers} setMaxPlayers={setMaxPlayers} onContinue={() => setPageShown("name")} />}
+    {pageShown === "joinGame" && <JoinPage code={code} onContinue={() => setPageShown("name")} />}
+    {pageShown === "name" && <NamePage name={name} setName={setName} connect={handleConnect}/>}
+    {pageShown === "lobby" && <LobbyPage lobbyOption={lobbyOption} maxPlayers={maxPlayers} code={code}/>}
+</div>
+
     )
 }
