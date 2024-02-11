@@ -47,7 +47,7 @@ export default function FoolMeTwice() {
             {pageShown === "createGame" && <CreatePage language={language} setLanguage={setLanguage} maxPlayers={maxPlayers} setMaxPlayers={setMaxPlayers} onContinue={() => setPageShown("name")} />}
             {pageShown === "joinGame" && <JoinPage code={code} onContinue={() => setPageShown("name")} />}
             {pageShown === "name" && <NamePage name={name} setName={setName} connect={handleConnect}/>}
-            {pageShown === "lobby" && <LobbyPage maxPlayers={maxPlayers} code={code}/>}
+            {pageShown === "lobby" && <LobbyPage lobbyOption={lobbyOption} maxPlayers={maxPlayers} code={code}/>}
         </div>
     )
 }

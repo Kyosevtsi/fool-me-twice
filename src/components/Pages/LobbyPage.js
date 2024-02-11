@@ -6,9 +6,9 @@ const LobbyPage = props => {
 
     return (
         <div>
-            <table>
-                {Array(4).fill(true).map((_, i) => <Repeated key={i} />)}
-            </table>
+            {/*<table>
+                {Array(4).fill(true).map((_, i) => < key={i} />)}
+    </table>*/}
             <p>Waiting for players.</p>
             <p>All players found! Starting game.</p>
             <p>Lobby Code: {props.code}</p>
