@@ -48,7 +48,6 @@ class Game:
             startTime = time.time()
             # translations['translations']
             rand_index = randint(0,(len(translations['translations'])-1))
-            print(rand_index)
             while rand_index in used_indeces:
                 rand_index = randint(0,(len(translations['translations'])-1))
             questionObj = translations['translations'][rand_index]
