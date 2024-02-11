@@ -29,6 +29,41 @@ class Game:
         self.gameState = 'waiting'
         self.round = 0
 
+    # def event_loop(self):
+    #     print("The game has started. Game ID: " + str(self.id))
+        
+    #     while self.gameState == 'waiting':
+    #         time.sleep(1)
+    #     print("Game with ID " + str(self.id) + " has started.")
+    #     # send the start events to the client
+    #     socketio.emit('gameStarting', {'gameID': self.id})
+    #     time.sleep(3)
+    #     socketio.emit('gameStarted', {'gameID': self.id})
+
+    #     # load the translations
+    #     f = open('../translations.json', 'r')
+    #     translations = json.load(f)
+    #     round = 0
+
+    #     used_indeces = set()
+    #     while round < NUMBER_OF_ROUNDS:
+    #         startTime = time.time()
+    #         round += 1
+    #         print(f"Round {round}!")
+    #         # translations['translations'] is the list of translations
+    #         rand_index = randint(0,(len(translations['translations'])-1))
+    #         while rand_index in used_indeces:
+    #             rand_index = randint(0,(len(translations['translations'])-1))
+    #         questionObj = translations['translations'][rand_index]
+    #         used_indeces.add(rand_index)
+
+    #         question = questionObj['Other'][int(self.language)]
+    #         socketio.emit('question', {'gameID': self.id, 'payload': question})
+
+    #         # check if all people have responded in the while loop
+    #         while (time.time() - startTime) < TIME_PER_QUESTION*1000 and not number_answers==number_players:
+    #             time.sleep(1)
+        
     def event_loop(self):
         print("The game has started. Game ID: " + str(self.id))
         
@@ -47,21 +82,29 @@ class Game:
 
         used_indeces = set()
         while round < NUMBER_OF_ROUNDS:
-            startTime = time.time()
             round += 1
             print(f"Round {round}!")
             # translations['translations'] is the list of translations
-            rand_index = randint(0,(len(translations['translations'])-1))
+            rand_index = randint(0, len(translations['translations']) - 1)
             while rand_index in used_indeces:
-                rand_index = randint(0,(len(translations['translations'])-1))
+                rand_index = randint(0, len(translations['translations']) - 1)
             questionObj = translations['translations'][rand_index]
             used_indeces.add(rand_index)
 
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
 
-            # check if all people have responded in the while loop
-            while (time.time() - startTime) < TIME_PER_QUESTION*1000 :
+            # Start the timer
+            start_time = time.time()
+
+            # Reset response flag for each player
+            responses_received = {player.sid: False for player in self.players}
+
+            # Wait for responses or timeout
+            while (time.time() - start_time) < TIME_PER_QUESTION:
+                all_responded = all(responses_received.values())
+                if all_responded:
+                    break
                 time.sleep(1)
 
             # get the responce
