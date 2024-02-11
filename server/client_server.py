@@ -61,7 +61,7 @@ class Game:
     #         socketio.emit('question', {'gameID': self.id, 'payload': question})
 
     #         # check if all people have responded in the while loop
-    #         while (time.time() - startTime) < TIME_PER_QUESTION*1000 and not number_answers==number_players:
+    #         while (time.time() - startTime) < TIME_PER_QUESTION*1000:
     #             time.sleep(1)
         
     def event_loop(self):
@@ -105,7 +105,7 @@ class Game:
                 all_responded = all(responses_received.values())
                 if all_responded:
                     break
-                time.sleep(1)
+                time.sleep(0.1)
 
             # get the responce
                 
@@ -119,7 +119,7 @@ class Game:
                 
             # calculate the points
                 
-            # end of the 
+            # end of the round
                 
 
         f.close()
