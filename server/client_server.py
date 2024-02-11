@@ -8,6 +8,7 @@ import json
 
 TIME_PER_QUESTION = 32
 PLAYERS_PER_GAME = 4
+NUMBER_OF_ROUNDS = 5
 activeGames = set()
 
 class Player:
@@ -42,24 +43,41 @@ class Game:
         # load the translations
         f = open('../translations.json', 'r')
         translations = json.load(f)
+        round = 0
 
         used_indeces = set()
-        while True:
+        while round < NUMBER_OF_ROUNDS:
             startTime = time.time()
-            # translations['translations']
+            round += 1
+            print(f"Round {round}!")
+            # translations['translations'] is the list of translations
             rand_index = randint(0,(len(translations['translations'])-1))
             while rand_index in used_indeces:
                 rand_index = randint(0,(len(translations['translations'])-1))
             questionObj = translations['translations'][rand_index]
             used_indeces.add(rand_index)
 
- 
             question = questionObj['Other'][int(self.language)]
             socketio.emit('question', {'gameID': self.id, 'payload': question})
 
             # check if all people have responded in the while loop
             while (time.time() - startTime) < TIME_PER_QUESTION*1000 :
                 time.sleep(1)
+
+            # get the responce
+                
+            # chop it down to feed into the AI
+                
+            # create a potential answer pool ---> display the pool
+            
+            # 15 seconds to pick the right answer
+                
+            # process the input and dispay the selections
+                
+            # calculate the points
+                
+            # end of the 
+                
 
         f.close()
         pass
