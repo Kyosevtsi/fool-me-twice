@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import './JoinGame.css';
 
 const JoinPage = props => {

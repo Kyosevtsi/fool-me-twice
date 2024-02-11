@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "./CreatePage.css"
 
 import espFlag from "../../images/esp_svg.svg";

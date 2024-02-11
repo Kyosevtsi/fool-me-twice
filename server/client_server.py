@@ -2,9 +2,11 @@ import time
 import socketio
 from flask import Flask, jsonify, request
 from flask_socketio import SocketIO
+from flask_cors import CORS
 from random import randint, choice
 import threading
 import json
+
 
 TIME_PER_QUESTION = 32
 PLAYERS_PER_GAME = 4
@@ -73,6 +75,7 @@ class Game:
 
 # Initialize the Flask app
 app = Flask(__name__)
+CORS(app)
 socketio = SocketIO(app)
 
 # API routes
@@ -80,7 +83,7 @@ socketio = SocketIO(app)
 def get_placeholder():
     return jsonify({'message': 'Placeholder'})
 
-@app.route('/createLobby', methods=['POST'])
+@app.route('/createLobby', methods=['GET'])
 def createLobby():
     data = request.args
     language = data['language']

@@ -3,7 +3,7 @@ const NamePage = props => {
         <div>
             <h2>Enter name</h2>
             <input type="text" value={props.name} onChange={(e) => props.setName(e.target.value)} />
-            <button onClick={() => props.handleConnect()}>Continue</button>
+            <button onClick={() => props.connect()}>Continue</button>
         </div>
     )
 }
