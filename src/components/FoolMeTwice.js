@@ -39,7 +39,7 @@ export default function FoolMeTwice() {
 
     return (
         <div className="container">
-    <img src={logo} alt="Logo" /> {/* Include the image */}
+    {pageShown === "home" &&  <img src={logo} alt="Logo" />} {/* Include the image */}
     {pageShown === 'home' &&
         <div className="button-container">
             <button onClick={() => changePageHandler("createGame")}>Create Game</button>   
