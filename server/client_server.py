@@ -7,7 +7,6 @@ import threading
 import json
 
 TIME_PER_QUESTION = 32
-PLAYERS_PER_GAME = 4
 NUMBER_OF_ROUNDS = 5
 activeGames = set()
 
@@ -126,9 +125,9 @@ class Game:
         pass
 
     def add_player(self, player):
-        if len(self.players) < PLAYERS_PER_GAME:
+        if len(self.players) < self.numPlayers:
             self.players.append(player)
-            socketio.emit('playerJoined', {'player': str(player),'playerID': player.pID ,'gameID': self.id})
+            socketio.emit('playerJoined', {'player': str(player),'playerID': player.sid ,'gameID': self.id})
             print(f"Player {player} joined the game.")
 
 # Initialize the Flask app
@@ -188,10 +187,10 @@ def join(rawData):
         socketio.emit('gameInProgress')
         return
 
-    player = Player(username, sid, len(game.players) + 1)
+    player = Player(username, 0, sid)
     game.add_player(player)
 
-    if len(game.players) == PLAYERS_PER_GAME:
+    if len(game.players) == game.numPlayers:
         socketio.emit('startGame')  # Notify everyone
         game.gameState = 'playing'
     else:
