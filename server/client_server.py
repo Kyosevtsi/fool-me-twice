@@ -122,7 +122,8 @@ def createLobby():
     activeGames.add(game)
 
     # Create a new player
-    
+    player = Player(hostName, 0, request.sid)
+    game.add_player(player)
 
     threading.Thread(target=game.event_loop).start()
 
