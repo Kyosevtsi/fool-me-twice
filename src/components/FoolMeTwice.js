@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-//import io from 'socket.io-client';
+import io from 'socket.io-client';
 import logo from '../images/foolmetwice.jpg'; // Import the image file
 
 import CreatePage from './Pages/CreatePage';
@@ -8,6 +8,8 @@ import JoinPage from './Pages/JoinGame';
 import NamePage from './Pages/NamePage';
 import LobbyPage from './Pages/LobbyPage';
 import './FoolMeTwice.css';
+
+const socket = io("http://localhost:5000");
 
 export default function FoolMeTwice() {
     const [pageShown, setPageShown] = useState("home");
@@ -30,9 +32,12 @@ export default function FoolMeTwice() {
     const handleConnect = async () => {
         console.log("Reached here");
         if (lobbyOption === "createGame") {
-            let res = await axios.get(`http://localhost:5000/createLobby?language=${languageMap[language]}&numPlayers=${maxPlayers}`);  // returns game id
+            let res = await axios.get(`http://localhost:5000/createLobby?language=${languageMap[language]}&numPlayers=${maxPlayers}&name=${name}`);  // returns game id
             console.log(res.data);
             setCode(res.data.gameID);
+            pageShown("lobby");
+        } else {  // lobbyOption === 'joinGame'
+            socket.emit("join", JSON.stringify({gameID: code, username: name}));
             pageShown("lobby");
         }
     }

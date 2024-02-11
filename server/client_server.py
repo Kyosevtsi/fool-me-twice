@@ -12,10 +12,11 @@ NUMBER_OF_ROUNDS = 5
 activeGames = set()
 
 class Player:
-    def __init__(self, name, sid):
+    def __init__(self, name, sid, pid):
         self.name = name
         self.score = 0
         self.sid = sid
+        self.id = pid
 
     def __str__(self):
         return self.name
@@ -93,13 +94,16 @@ class Game:
     def add_player(self, player):
         if len(self.players) < self.numPlayers:
             self.players.append(player)
-            socketio.emit('playerJoined', {'player': str(player),'playerID': player.sid ,'gameID': self.id})
+            #socketio.emit('playerJoined', {'player': str(player),'playerID': player.pid ,'gameID': self.id})
+            #player_info = [{'name': p.name, 'id': p.id} for p in self.players]
+            #socketio.emit('updatePlayers', {'gameID': self.id, 'players': player_info})
+            socketio.emit('updatePlayers', [str(player) for player in self.players])
             print(f"Player {player} joined the game.")
 
 # Initialize the Flask app
 app = Flask(__name__)
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origin="*")
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 # API routes
 @app.route('/api/placeholder', methods=['GET'])
@@ -111,7 +115,7 @@ def createLobby():
     data = request.args
     language = data['language']
     numPlayers = int(data['numPlayers'])
-    hostName = data["name"]
+    hostName = data['name']
 
     # Create a new game
     gameID = randint(1000, 9999)
@@ -122,7 +126,7 @@ def createLobby():
     activeGames.add(game)
 
     # Create a new player
-    player = Player(hostName, 0, request.sid)
+    player = Player(hostName, request.sid, 1)
     game.add_player(player)
 
     threading.Thread(target=game.event_loop).start()
@@ -159,14 +163,14 @@ def join(rawData):
         socketio.emit('gameInProgress')
         return
 
-    player = Player(username, 0, sid)
+    new_player_pid = len(game.players) + 1
+    player = Player(username, 0, sid, new_player_pid)
     game.add_player(player)
+    # socketio.emit('updatePlayers', [str(player) for player in game.players])  # Update player list
 
     if len(game.players) == game.numPlayers:
         socketio.emit('startGame')  # Notify everyone
         game.gameState = 'playing'
-    else:
-        socketio.emit('updatePlayers', [str(player) for player in game.players])  # Update player list
 
 @socketio.on('response')
 def response(rawData):
